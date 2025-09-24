@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Juros e Multa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <img src="s.png" alt="Logo" class="logo">
+        <h1>Calculadora de Juros e Multa</h1>
+        <form id="calc-form">
+            <label for="valor">Valor da Dívida:</label>
+            <input type="number" id="valor" required>
+
+            <label for="data-inicio">Data de Início do Atraso:</label>
+            <input type="date" id="data-inicio" required>
+
+            <label for="data-pagamento">Data de Pagamento:</label>
+            <input type="date" id="data-pagamento" required>
+
+            <button type="button" onclick="calcular()">Calcular</button>
+        </form>
+
+        <h2>Resultado:</h2>
+        <p id="resultado"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
