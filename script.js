@@ -15,8 +15,8 @@ function calcular() {
     let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     // Taxas de juros e multa
-    let taxaJurosDiaria = 0.0025; // 0,25% ao dia
-    let multaDiaria = 0.0025; // 0,25% ao dia
+    let taxaJurosDiaria = 0.005; // 0,50% ao dia
+    let multaDiaria = 0.005;     // 0,50% ao dia
 
     // Calculando o valor dos juros e da multa
     let juros = valor * taxaJurosDiaria * diffDays; 
@@ -28,8 +28,8 @@ function calcular() {
     // Exibindo o resultado
     let resultado = `
         Valor original: R$ ${valor.toFixed(2)}<br>
-        Juros (0,25% ao dia): R$ ${juros.toFixed(2)}<br>
-        Multa (0,25% ao dia): R$ ${multa.toFixed(2)}<br>
+        Juros (0,50% ao dia): R$ ${juros.toFixed(2)}<br>
+        Multa (0,50% ao dia): R$ ${multa.toFixed(2)}<br>
         Total a pagar: R$ ${total.toFixed(2)}
     `;
 
