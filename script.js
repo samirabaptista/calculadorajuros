@@ -1,37 +1,57 @@
 function calcular() {
-    // Obtendo os valores inseridos no formulário
-    let valor = parseFloat(document.getElementById("valor").value);
-    let dataInicio = new Date(document.getElementById("data-inicio").value);
-    let dataPagamento = new Date(document.getElementById("data-pagamento").value);
+    const valorInput = document.getElementById("valor");
+    const dataInicioInput = document.getElementById("data-inicio");
+    const dataPagamentoInput = document.getElementById("data-pagamento");
+    const resultadoEl = document.getElementById("resultado");
 
-    // Verificando se a data de pagamento é posterior à data de início do atraso
-    if (dataPagamento <= dataInicio) {
-        alert("A data de pagamento deve ser posterior à data de início do atraso.");
+    const valor = Number(valorInput.value.replace(",", "."));
+    const dataInicioStr = dataInicioInput.value;
+    const dataPagamentoStr = dataPagamentoInput.value;
+
+    if (!valor || valor <= 0) {
+        resultadoEl.innerHTML = "Informe um valor valido.";
         return;
     }
 
-    // Calculando o número de dias de atraso
-    let diffTime = Math.abs(dataPagamento - dataInicio);
-    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (!dataInicioStr || !dataPagamentoStr) {
+        resultadoEl.innerHTML = "Preencha as duas datas.";
+        return;
+    }
 
-    // Taxas de juros e multa
-    let taxaJurosDiaria = 0.005; // 0,50% ao dia
-    let multaDiaria = 0.005;     // 0,50% ao dia
+    // Cria datas sem problema de fuso horario
+    const [anoInicio, mesInicio, diaInicio] = dataInicioStr.split("-").map(Number);
+    const [anoPag, mesPag, diaPag] = dataPagamentoStr.split("-").map(Number);
 
-    // Calculando o valor dos juros e da multa
-    let juros = valor * taxaJurosDiaria * diffDays; 
-    let multa = valor * multaDiaria * diffDays; 
+    const dataInicio = new Date(anoInicio, mesInicio - 1, diaInicio);
+    const dataPagamento = new Date(anoPag, mesPag - 1, diaPag);
 
-    // Calculando o valor total
-    let total = valor + juros + multa;
+    if (dataPagamento <= dataInicio) {
+        resultadoEl.innerHTML = "A data de pagamento deve ser posterior a data de inicio do atraso.";
+        return;
+    }
 
-    // Exibindo o resultado
-    let resultado = `
-        Valor original: R$ ${valor.toFixed(2)}<br>
-        Juros (0,50% ao dia): R$ ${juros.toFixed(2)}<br>
-        Multa (0,50% ao dia): R$ ${multa.toFixed(2)}<br>
-        Total a pagar: R$ ${total.toFixed(2)}
+    const msPorDia = 1000 * 60 * 60 * 24;
+    const diffTime = dataPagamento.getTime() - dataInicio.getTime();
+    const diffDays = Math.floor(diffTime / msPorDia);
+
+    const taxaJurosDiaria = 0.005; // 0,50% ao dia
+    const taxaMultaDiaria = 0.005; // 0,50% ao dia
+
+    const juros = valor * taxaJurosDiaria * diffDays;
+    const multa = valor * taxaMultaDiaria * diffDays;
+    const total = valor + juros + multa;
+
+    const formatarMoeda = (numero) =>
+        numero.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
+        });
+
+    resultadoEl.innerHTML = `
+        <p>Valor original: <strong>${formatarMoeda(valor)}</strong></p>
+        <p>Dias de atraso: <strong>${diffDays}</strong></p>
+        <p>Juros (0,50% ao dia): <strong>${formatarMoeda(juros)}</strong></p>
+        <p>Multa (0,50% ao dia): <strong>${formatarMoeda(multa)}</strong></p>
+        <p>Total a pagar: <strong>${formatarMoeda(total)}</strong></p>
     `;
-
-    document.getElementById("resultado").innerHTML = resultado;
 }
